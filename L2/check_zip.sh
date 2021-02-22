@@ -76,16 +76,7 @@ cp $1 $tmp_folder
 cd $tmp_folder
 unzip $1 > /dev/null
 
-echo "Transferring necessary skeleton files"
-sk="skeleton"
-mkdir $sk
-cd $sk
-wget "https://www.comp.nus.edu.sg/~sooyj/cs2106_2021s2/lab1.tar.gz" 2> /dev/null
-tar -zxvf lab1.tar.gz > /dev/null
-cd ../
-
-exercises=(ex2 ex3)
-ex2=("ex2/ex2.c")
+exercises=(ex3)
 ex3=("ex3/ex3.c")
 for ex in "${exercises[@]}"; do
     declare -n files=$ex
@@ -101,22 +92,11 @@ for ex in "${exercises[@]}"; do
         continue
     fi
 
-    if [[ $ex == @('ex2'|'ex3') ]]
+    if check_compile $ex
     then
-        transfer_files $sk "L1" $ex 
-        if check_compile $ex
-        then
-            echo "$ex: Failed - does not compile"
-            continue
-        fi
-
-        test_status="$(run_tests $ex)"
-        if ! [ -z "$test_status" ]; then
-            echo "$ex: Failed - $test_status"
-            continue
-        fi
+        echo "$ex: Failed - does not compile"
+        continue
     fi
-
     echo "$ex: Success"
 done
 

@@ -18,7 +18,7 @@ compute cluster node (Linux on x86)
 #include <fcntl.h>      //For stat()
 #include <sys/types.h>   
 #include <sys/stat.h>
-//#include <sys/wait.h>   //for waitpid()
+#include <sys/wait.h>   //for waitpid()
 #include <unistd.h>     //for fork(), wait()
 #include <string.h>     //for string comparison etc
 #include <stdlib.h>     //for malloc()
@@ -173,7 +173,7 @@ void doExecution(char *filePath) {
     int result = fork();
     // For child process:
     if (result == 0) {
-        execl(filePath, (char*) NULL);
+        execl(filePath, filePath,(char*) NULL);
     } else {
         // For parent process:
         waitpid(result,NULL,0);

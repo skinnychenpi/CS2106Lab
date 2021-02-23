@@ -1,5 +1,5 @@
 /*************************************
-* Lab 2 Exercise 2
+* Lab 2 Exercise 3
 * Name: Chen Yuheng
 * Student Id: A0229929L
 * Lab Group: SOLO

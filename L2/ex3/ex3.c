@@ -248,7 +248,8 @@ void getFileArgs(char *fileArgs[], char **cmdLineArgs, int *runInBg) {
 }
 
 void doShowResult(int resultStatus) {
-    printf("%d\n",resultStatus);
+    int returnValue = WEXITSTATUS(resultStatus);
+    printf("%d\n",returnValue);
     printf("\n");
 }
 

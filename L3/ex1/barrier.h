@@ -16,7 +16,7 @@ for the 2nd member if  you are on a team
  */
 #ifndef __CS2106_BARRIER_H_
 #define __CS2106_BARRIER_H_
-
+#include <semaphore.h>
 typedef struct barrier {
   int count;
   //TODO: add additional fields here

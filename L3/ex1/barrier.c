@@ -29,9 +29,7 @@ void barrier_init ( barrier_t *barrier, int count )
     //TODO: Implement the function
     barrier->count = count;
     barrier->arrived = 0;
-    barrier->mutex = malloc(sizeof(sem_t));
     sem_init(&(barrier->mutex), 0, 1 );
-    barrier->waitQ = malloc(sizeof(sem_t));
     sem_init(&(barrier->waitQ), 0, 0 );
 }
 

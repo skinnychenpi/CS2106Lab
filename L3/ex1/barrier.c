@@ -53,6 +53,4 @@ void barrier_destroy ( barrier_t *barrier )
     //TODO: Implement the function
     sem_destroy(&(barrier->mutex));
     sem_destroy(&(barrier->waitQ));
-    free(&(barrier->mutex));
-    free(&(barrier->waitQ));
 }

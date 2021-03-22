@@ -1,8 +1,8 @@
 /*************************************
-* Lab 3 Exercise 3
-* Name:
-* Student Id: A????????
-* Lab Group: B??
+* Lab 3 Exercise 2
+* Name: Chen Yuheng
+* Student Id: A0229929L
+* Lab Group: SOLO
 *************************************
 Note: Duplicate the above and fill in 
 for the 2nd member if  you are on a team
@@ -16,8 +16,8 @@ Copy over the solution and modify as needed.
 ************************************/
 
 
-#ifndef __CS2106_RWLOCKV2_H_
-#define __CS2106_RWLOCKV2_H_
+#ifndef __CS2106_RWLOCKV1_H_
+#define __CS2106_RWLOCKV1_H_
 
 #include <pthread.h> // To import the pthread_mutex_t type.
 
@@ -26,6 +26,10 @@ typedef struct {
   pthread_mutex_t mutex;
   int reader_count;
   int writer_count;
+  pthread_mutex_t writeLock;
+  int writer_wants_enter;
+  pthread_mutex_t readLock;
+  pthread_mutex_t writeMutex;
 } rw_lock;
 
 //Note: You are NOT allowed to change the function headers

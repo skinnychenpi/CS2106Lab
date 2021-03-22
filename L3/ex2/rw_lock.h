@@ -1,8 +1,8 @@
 /*************************************
 * Lab 3 Exercise 2
-* Name:
-* Student Id: A????????
-* Lab Group: B??
+* Name: Chen Yuheng
+* Student Id: A0229929L
+* Lab Group: SOLO
 *************************************
 Note: Duplicate the above and fill in 
 for the 2nd member if  you are on a team
@@ -18,6 +18,7 @@ typedef struct {
   pthread_mutex_t mutex;
   int reader_count;
   int writer_count;
+  pthread_mutex_t writeLock;
 } rw_lock;
 
 //Note: You are NOT allowed to change the function headers

@@ -29,7 +29,7 @@ extern sem_t concurrent_cars_mutex;
 
 sem_t *segmentEntries;
 sem_t maximumCarsController;
-pthread_mutex_t maximumCarsControllerMutex;
+// pthread_mutex_t maximumCarsControllerMutex;
 
 
 
@@ -42,12 +42,9 @@ void initialise()
     for (int i = 0; i < num_of_segments ; i++) {
         sem_init(&segmentEntries[i], 0, 1);
     }
-    // sem_init(&maximumCarsController, 0, num_of_segments - 1);
-    
-    // maximumCarsController = malloc(sizeof(sem_t));
-    // ensure_successful_malloc(maximumCarsController);
-    sem_init(&maximumCarsController, 0, 1);
-    pthread_mutex_init(&maximumCarsControllerMutex,NULL);
+
+    sem_init(&maximumCarsController, 0, num_of_segments - 1);
+    // pthread_mutex_init(&maximumCarsControllerMutex,NULL);
 
     
 
@@ -82,22 +79,22 @@ void* car(void* car)
     sem_wait(&maximumCarsController);
     // pthread_mutex_lock(&maximumCarsControllerMutex);
     
-    // sem_wait(&segmentEntries[entry]);
+    sem_wait(&segmentEntries[entry]);
     printf("Car No.%d enters roundabout.\n",theCar->car_id);
     
-    // enter_roundabout(theCar);
-    // // Proceed
-    // int current = entry;
-    // while(current != destination) {
-    //     int next = NEXT(current,num_of_segments);
-    //     // sem_wait(&segmentEntries[next]);
-    //     // sem_post(&segmentEntries[current]);
-    //     move_to_next_segment(theCar);
-    //     current = theCar->current_seg;
-    // }
-    // // Exit
-    // exit_roundabout(theCar);
-    // // sem_post(&segmentEntries[destination]);
+    enter_roundabout(theCar);
+    // Proceed
+    int current = entry;
+    while(current != destination) {
+        int next = NEXT(current,num_of_segments);
+        sem_wait(&segmentEntries[next]);
+        sem_post(&segmentEntries[current]);
+        move_to_next_segment(theCar);
+        current = theCar->current_seg;
+    }
+    // Exit
+    exit_roundabout(theCar);
+    sem_post(&segmentEntries[destination]);
     
     printf("Car No.%d exits roundabout.\n",theCar->car_id);
     

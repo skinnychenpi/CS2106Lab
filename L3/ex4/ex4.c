@@ -1,8 +1,8 @@
 /*************************************
-* Lab 3 Exercise 4
-* Name:
-* Student Id: A????????
-* Lab Group: B??
+* Lab 3 Exercise 2
+* Name: Chen Yuheng
+* Student Id: A0229929L
+* Lab Group: SOLO
 *************************************
 Note: Duplicate the above and fill in 
 for the 2nd member if  you are on a team
@@ -24,12 +24,9 @@ for the 2nd member if  you are on a team
 // ex4_driver.c in your code.
 extern int num_of_cars;
 extern int num_of_segments;
-extern int concurrent_cars;
-extern sem_t concurrent_cars_mutex;
 
 sem_t *segmentEntries;
 sem_t maximumCarsController;
-// pthread_mutex_t maximumCarsControllerMutex;
 
 
 
@@ -44,7 +41,6 @@ void initialise()
     }
 
     sem_init(&maximumCarsController, 0, num_of_segments - 1);
-    // pthread_mutex_init(&maximumCarsControllerMutex,NULL);
 
     
 
@@ -57,8 +53,7 @@ void cleanup()
         sem_destroy(&segmentEntries[i]);
     }
     free(segmentEntries);
-    // sem_destroy(maximumCarsController);
-    // free(maximumCarsController);
+    sem_destroy(&maximumCarsController);
 }
 
 void* car(void* car)
@@ -77,12 +72,12 @@ void* car(void* car)
     
     // Enter
     sem_wait(&maximumCarsController);
-    // pthread_mutex_lock(&maximumCarsControllerMutex);
     
     sem_wait(&segmentEntries[entry]);
-    printf("Car No.%d enters roundabout.\n",theCar->car_id);
+    // printf("Car No.%d enters roundabout.\n",theCar->car_id);
     
     enter_roundabout(theCar);
+    
     // Proceed
     int current = entry;
     while(current != destination) {
@@ -92,14 +87,13 @@ void* car(void* car)
         sem_post(&segmentEntries[current]);
         current = theCar->current_seg;
     }
+    
     // Exit
     exit_roundabout(theCar);
     sem_post(&segmentEntries[destination]);
     
-    printf("Car No.%d exits roundabout.\n",theCar->car_id);
-    
+    // printf("Car No.%d exits roundabout.\n",theCar->car_id);
     sem_post(&maximumCarsController);
-    // pthread_mutex_unlock(&maximumCarsControllerMutex);
 
     
     pthread_exit(NULL);

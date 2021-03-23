@@ -88,8 +88,8 @@ void* car(void* car)
     while(current != destination) {
         int next = NEXT(current,num_of_segments);
         sem_wait(&segmentEntries[next]);
-        sem_post(&segmentEntries[current]);
         move_to_next_segment(theCar);
+        sem_post(&segmentEntries[current]);
         current = theCar->current_seg;
     }
     // Exit

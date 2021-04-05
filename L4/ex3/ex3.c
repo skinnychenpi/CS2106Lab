@@ -1,8 +1,8 @@
 /*************************************
 * Lab 4 Exercise 3
-* Name:
-* Student Id: A????????
-* Lab Group: B??
+* Name: Chen Yuheng
+* Student Id: A0229929L
+* Lab Group: SOLO
 *************************************
 Note: Duplicate the above and fill in 
 for the 2nd member if  you are on a team
@@ -225,9 +225,16 @@ int setupHeap(int initialSize)
     //TODO: Task 1. Setup the rest of the bookkeeping info:
     //       hmi.A <= an array of partition linked list
     //       hmi.maxIdx <= the largest index for hmi.A[]
-    //       
-    hmi.A = NULL;   //change this!
-    hmi.maxIdx = 0; //change this!
+    int numOfLevels = log2Floor(initialSize);
+    hmi.A = malloc(numOfLevels*sizeof(partInfo*));
+    hmi.maxIdx = numOfLevels;
+    for (int i = 0; i < numOfLevels; i++) {
+        hmi.A[i] = NULL;
+    }
+    partInfo start;
+    start.offset = 0;
+    start.nextPart = NULL;
+    hmi.A[0] = &start;
 
     return 1;
 }

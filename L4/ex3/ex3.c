@@ -234,7 +234,7 @@ int setupHeap(int initialSize)
     partInfo* start = malloc(sizeof(partInfo));
     start->offset = 0;
     start->nextPart = NULL;
-    hmi.A[0] = start;
+    hmi.A[numOfLevels] = start;
 
     return 1;
 }

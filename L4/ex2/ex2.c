@@ -207,6 +207,7 @@ void* mymalloc(int size)
 	while ( current != NULL ){
         if (current->status == FREE && current->size - size >= 0 && current->size - size < gap) {
             gap = current->status - size;
+            printf("The gap is : %d\n",gap);
             bestPart = current;
         }
 		current = current->nextPart;

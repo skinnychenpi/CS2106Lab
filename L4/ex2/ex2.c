@@ -214,7 +214,7 @@ void* mymalloc(int size)
         printf("I am still in the loop!\n");
 	}
     printf("I am out the loop!\n");
-    if (current == NULL){	//heap full
+    if (gap == hmi.totalSize){	//heap full
 		return NULL;
 	}
 

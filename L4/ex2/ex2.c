@@ -201,34 +201,15 @@ void* mymalloc(int size)
     //  - subtraction take care of the case where size is already multiples of 4. 
     //This can be achieved via bitwise operation too.
     size = (size - 1) / 4 * 4 + 4;
-    // partInfo *bestPart = hmi.pListHead;
-    // int gap = hmi.totalSize;
-    // //Best-fit algorithm
-	// while ( current != NULL ){
-    //     if (current->status == FREE && current->size - size >= 0 && current->size - size < gap) {
-    //         gap = current->size - size;
-    //         printf("The gap is : %d\n",gap);
-    //         bestPart = current;
-    //     }
-	// 	current = current->nextPart;
-	// }
-
-    // if (current == NULL){	//heap full
-	// 	return NULL;
-	// }
-
-	// //Do we need to split the partition?
-	// if (bestPart->size > size) {
-	// 	splitPart(bestPart, size);
-	// }
-
-	// bestPart->status = OCCUPIED;
-	
-	// return (void*)hmi.base + bestPart->offset;
-
-    while ( current != NULL && 
-			(current->status == OCCUPIED || current->size < size) ){
-
+    partInfo *bestPart = hmi.pListHead;
+    int gap = hmi.totalSize;
+    //Best-fit algorithm
+	while ( current != NULL ){
+        if (current->status == FREE && current->size - size >= 0 && current->size - size < gap) {
+            gap = current->size - size;
+            printf("The gap is : %d\n",gap);
+            bestPart = current;
+        }
 		current = current->nextPart;
 	}
 
@@ -237,13 +218,34 @@ void* mymalloc(int size)
 	}
 
 	//Do we need to split the partition?
-	if (current->size > size) {
-		splitPart(current, size);
+	if (bestPart->size > size) {
+		printf("I am in the split!\n");
+        splitPart(bestPart, size);
 	}
-
-	current->status = OCCUPIED;
+    printf("I am out the split!\n");
+    printf("The Partition I chose with size: %d\nStarts at: %d",bestPart->size,bestPart->offset);
+	bestPart->status = OCCUPIED;
 	
-	return (void*)hmi.base + current->offset;
+	return (void*)hmi.base + bestPart->offset;
+
+    // while ( current != NULL && 
+	// 		(current->status == OCCUPIED || current->size < size) ){
+
+	// 	current = current->nextPart;
+	// }
+
+    // if (current == NULL){	//heap full
+	// 	return NULL;
+	// }
+
+	// //Do we need to split the partition?
+	// if (current->size > size) {
+	// 	splitPart(current, size);
+	// }
+
+	// current->status = OCCUPIED;
+	
+	// return (void*)hmi.base + current->offset;
 }
 
 void myfree(void* address)

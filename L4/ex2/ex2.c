@@ -206,7 +206,7 @@ void* mymalloc(int size)
     //Best-fit algorithm
 	while ( current != NULL ){
         if (current->status == FREE && current->size - size >= 0 && current->size - size < gap) {
-            gap = current->status - size;
+            gap = current->size - size;
             printf("The gap is : %d\n",gap);
             bestPart = current;
         }

@@ -211,8 +211,9 @@ void* mymalloc(int size)
             bestPart = current;
         }
 		current = current->nextPart;
+        printf("I am still in the loop!\n");
 	}
-
+    printf("I am out the loop!\n");
     if (current == NULL){	//heap full
 		return NULL;
 	}

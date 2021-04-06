@@ -102,16 +102,30 @@ void printHeapStatistic()
     //TODO: Copy over your completed function from ex1 here
 
 
-    printf("\nHeap Usage Statistics:\n");
+   printf("\nHeap Usage Statistics:\n");
     printf("======================\n");
 
     printf("Total Space: %d bytes\n", hmi.totalSize);
 
-    printf("Total Occupied Partitions: %d\n", 0);
-    printf("\tTotal Occupied Size: %d bytes\n", 0);
+   //Remember to preserve the message format!
+    int occupiedPartition = 0;
+    int occupiedSize = 0;
+    int totalPartition = 0;
+    partInfo* start = hmi.pListHead;
+    while (start != NULL) {
+        if (start->status == 1) {
+            occupiedSize += start->size;
+            occupiedPartition++;
+        }
+        start = start->nextPart;
+        totalPartition++;
+    }
+    
+    printf("Total Occupied Partitions: %d\n", occupiedPartition);
+    printf("\tTotal Occupied Size: %d bytes\n", occupiedSize);
 
-    printf("Total Number of Holes: %d\n", 0);
-    printf("\tTotal Hole Size: %d bytes\n", 0);
+    printf("Total Number of Holes: %d\n", totalPartition - occupiedPartition);
+    printf("\tTotal Hole Size: %d bytes\n", hmi.totalSize - occupiedSize);
 }
 
 int setupHeap(int initialSize)
@@ -187,11 +201,14 @@ void* mymalloc(int size)
     //  - subtraction take care of the case where size is already multiples of 4. 
     //This can be achieved via bitwise operation too.
     size = (size - 1) / 4 * 4 + 4;
- 
-    //First-fit algorithm
-	while ( current != NULL && 
-			(current->status == OCCUPIED || current->size < size) ){
-
+    partInfo *bestPart = hmi.pListHead;
+    int gap = hmi.totalSize;
+    //Best-fit algorithm
+	while ( current != NULL ){
+        if (current->status == FREE && current->size - size >= 0 && current->size - size < gap) {
+            gap = current->status - size;
+            bestPart = current;
+        }
 		current = current->nextPart;
 	}
 
@@ -200,13 +217,13 @@ void* mymalloc(int size)
 	}
 
 	//Do we need to split the partition?
-	if (current->size > size) {
-		splitPart(current, size);
+	if (bestPart->size > size) {
+		splitPart(bestPart, size);
 	}
 
-	current->status = OCCUPIED;
+	bestPart->status = OCCUPIED;
 	
-	return (void*)hmi.base + current->offset;
+	return (void*)hmi.base + bestPart->offset;
 }
 
 void myfree(void* address)

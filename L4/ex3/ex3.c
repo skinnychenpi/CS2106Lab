@@ -228,7 +228,7 @@ int setupHeap(int initialSize)
     int numOfLevels = log2Floor(initialSize);
     hmi.A = (partInfo**) malloc((numOfLevels + 1) * sizeof(partInfo*));
     hmi.maxIdx = numOfLevels;
-    for (int i = 0; i < numOfLevels; i++) {
+    for (int i = 0; i < numOfLevels + 1; i++) {
         hmi.A[i] = NULL;
     }
     partInfo* start = malloc(sizeof(partInfo));

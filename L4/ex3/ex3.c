@@ -257,35 +257,34 @@ void* mymalloc(int size)
  *********************************************************/
 {
     //TODO: Task 2. Implement the allocation using buddy allocator
-    // int S = log2Ceiling(size);
-    // partInfo *levelSPart = removePartitionAtLevel(S);
+    int S = log2Ceiling(size);
+    partInfo *levelSPart = removePartitionAtLevel(S);
 
-    // if (levelSPart != NULL) {
-    //     return (void*)hmi.base + levelSPart->offset;
-    // } else {
-    //     int R = S+1;
-    //     partInfo *levelRPart = removePartitionAtLevel(R);
-    //     while (levelRPart == NULL && R <= hmi.maxIdx) {
-    //         R++;
-    //         levelRPart = removePartitionAtLevel(R);
-    //     }
-    //     if (R == hmi.maxIdx) {
-    //         printf("I am here\n");
-    //         return NULL;
-    //     }
-    //     int K = R - 1; 
-    //     while (K >= S) {
-    //         partInfo *newPart = malloc(sizeof(partInfo));
-    //         newPart->nextPart = NULL;
-    //         int size = 1;
-    //         size <<= K;
-    //         newPart->offset = levelRPart->offset + size;
-    //         hmi.A[K] = newPart;
-    //         K--;
-    //     }
-    //     return (void*)hmi.base + levelRPart->offset;
-    // }
-    return NULL;
+    if (levelSPart != NULL) {
+        return (void*)hmi.base + levelSPart->offset;
+    } else {
+        int R = S+1;
+        partInfo *levelRPart = removePartitionAtLevel(R);
+        while (levelRPart == NULL && R <= hmi.maxIdx) {
+            printf("THE R VALUE IS: %d\n", R);
+            R++;
+            levelRPart = removePartitionAtLevel(R);
+        }
+        if (R == hmi.maxIdx) {
+            return NULL;
+        }
+        int K = R - 1; 
+        while (K >= S) {
+            partInfo *newPart = malloc(sizeof(partInfo));
+            newPart->nextPart = NULL;
+            int size = 1;
+            size <<= K;
+            newPart->offset = levelRPart->offset + size;
+            hmi.A[K] = newPart;
+            K--;
+        }
+        return (void*)hmi.base + levelRPart->offset;
+    }
 
 }
 

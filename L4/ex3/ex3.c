@@ -205,6 +205,7 @@ partInfo* removePartitionAtLevel(unsigned int lvl)
     if (levelPart == NULL) {
         return NULL;
     } else {
+        printf("HERE THE VALUE OF LVL IS: %d\n",lvl);
         partInfo* newHead = levelPart->nextPart;
         hmi.A[lvl] = newHead;
         levelPart->nextPart = NULL;

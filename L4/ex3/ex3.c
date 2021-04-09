@@ -205,10 +205,8 @@ partInfo* removePartitionAtLevel(unsigned int lvl)
     if (levelPart == NULL) {
         return NULL;
     } else {
-        printf("HERE THE VALUE OF LVL IS: %d\n",lvl);
         partInfo* newHead = levelPart->nextPart;
         hmi.A[lvl] = newHead;
-        printf("THE OFFSET OF NEWHEAD IS:%d \n",newHead->offset);
         levelPart->nextPart = NULL;
         return levelPart;
     }
@@ -274,7 +272,7 @@ void* mymalloc(int size)
                 return NULL;
             }
         }
-        int K = R - 1; 
+        int K = R - 2; 
         while (K >= S) {
             partInfo *newPart = malloc(sizeof(partInfo));
             newPart->nextPart = NULL;

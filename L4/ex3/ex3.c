@@ -208,6 +208,7 @@ partInfo* removePartitionAtLevel(unsigned int lvl)
         printf("HERE THE VALUE OF LVL IS: %d\n",lvl);
         partInfo* newHead = levelPart->nextPart;
         hmi.A[lvl] = newHead;
+        printf("THE OFFSET OF NEWHEAD IS:%d \n",newHead->offset);
         levelPart->nextPart = NULL;
         return levelPart;
     }

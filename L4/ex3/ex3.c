@@ -265,7 +265,7 @@ void* mymalloc(int size)
     } else {
         int R = S+1;
         partInfo *levelRPart = removePartitionAtLevel(R);
-        while (levelRPart == NULL && R < hmi.maxIdx) {
+        while (levelRPart == NULL && R <= hmi.maxIdx) {
             R++;
             levelRPart = removePartitionAtLevel(R);
         }

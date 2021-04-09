@@ -266,14 +266,14 @@ void* mymalloc(int size)
         int R = S+1;
         partInfo *levelRPart = removePartitionAtLevel(R);
         printf("THe max IDX is %d\n",hmi.maxIdx);
-        while (levelRPart == NULL && R <= hmi.maxIdx) {
+        while (levelRPart == NULL) {
             levelRPart = removePartitionAtLevel(R);
             R++;
+            if (R > hmi.maxIdx && levelRPart == NULL) {
+                printf("I am here!!!\n");
+                return NULL;
+            }
             printf("The R value is %d\n",R);
-        }
-        if (R > hmi.maxIdx) {
-            printf("I am here!!!\n");
-            return NULL;
         }
         int K = R - 1; 
         while (K >= S) {

@@ -187,7 +187,23 @@ void addPartitionAtLevel( unsigned int lvl, unsigned int offset )
  *      at higher level
  *********************************************************/
 {
-    
+    partInfo* levelHead = hmi.A[lvl];
+    partInfo* cursor = levelHead;
+    partInfo* toAdd = malloc(sizeof(partInfo));
+    toAdd->offset = offset;
+    toAdd->nextPart = NULL;
+
+    while (cursor != NULL && cursor->offset < offset) {
+        if (cursor->nextPart != NULL && cursor->nextPart->offset > offset) break;
+        cursor = cursor->nextPart;
+    }
+    if (cursor == NULL) {
+        cursor = toAdd;
+    } else {
+        cursor->nextPart = toAdd;
+        toAdd->nextPart = cursor->nextPart;
+    }
+
 }
 
 partInfo* removePartitionAtLevel(unsigned int lvl)
@@ -294,4 +310,10 @@ void myfree(void* address, int size)
  *********************************************************/
 {
     //TODO: Task 3. Implement the de allocation using buddy allocator
+    int levelToSearch = log2Ceiling(size);
+    int* addressPtr = (int*) address;
+    int addressValue = * addressPtr;
+    addPartitionAtLevel(levelToSearch, addressValue);
+    
+
 }

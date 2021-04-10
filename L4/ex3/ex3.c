@@ -210,6 +210,7 @@ void addPartitionAtLevel( unsigned int lvl, unsigned int offset )
         prevCursor->nextPart = toAdd;
         toAdd->nextPart = prevCursor->nextPart;
     }
+    hmi.A[lvl] = levelHead;
 
 }
 

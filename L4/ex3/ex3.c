@@ -189,19 +189,25 @@ void addPartitionAtLevel( unsigned int lvl, unsigned int offset )
 {
     partInfo* levelHead = hmi.A[lvl];
     partInfo* cursor = levelHead;
+    partInfo* prevCursor = NULL;
+    
     partInfo* toAdd = malloc(sizeof(partInfo));
     toAdd->offset = offset;
     toAdd->nextPart = NULL;
 
+    if (levelHead == NULL) {
+        levelHead = toAdd;
+    }
     while (cursor != NULL && cursor->offset < offset) {
-        if (cursor->nextPart != NULL && cursor->nextPart->offset > offset) break;
+        prevCursor = cursor;
         cursor = cursor->nextPart;
     }
-    if (cursor == NULL) {
-        cursor = toAdd;
+    if (prevCursor == NULL) {
+        levelHead = toAdd;
+        toAdd->nextPart = cursor;
     } else {
-        cursor->nextPart = toAdd;
-        toAdd->nextPart = cursor->nextPart;
+        prevCursor->nextPart = toAdd;
+        toAdd->nextPart = prevCursor->nextPart;
     }
 
 }

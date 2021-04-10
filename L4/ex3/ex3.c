@@ -281,6 +281,7 @@ void* mymalloc(int size)
     } else {
         int R = S + 1;
         partInfo *levelRPart = removePartitionAtLevel(R);
+        printf("BEFORE THE CHECK THE R VALUE IS %d\n",R);
         while (levelRPart == NULL) {
             printf("I am here! AND THE R VALUE IS %d\n",R);
             levelRPart = removePartitionAtLevel(R);

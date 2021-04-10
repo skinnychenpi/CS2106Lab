@@ -279,20 +279,19 @@ void* mymalloc(int size)
     if (levelSPart != NULL) {
         return (void*)hmi.base + levelSPart->offset;
     } else {
-        int R = S + 1;
+        int R = S;
         partInfo *levelRPart = removePartitionAtLevel(R);
-        printf("BEFORE THE CHECK THE R VALUE IS %d\n",R);
+        // printf("BEFORE THE CHECK THE R VALUE IS %d\n",R);
         while (levelRPart == NULL) {
-            printf("I am here! AND THE R VALUE IS %d\n",R);
-            levelRPart = removePartitionAtLevel(R);
             R++;
             if (R > hmi.maxIdx && levelRPart == NULL) {
                 return NULL;
             }
+            levelRPart = removePartitionAtLevel(R);
         }
-        int K = R - 2; 
+        int K = R - 1; 
         while (K >= S) {
-            printf("I am here! AND THE K VALUE IS %d\n",K);
+            // printf("I am here! AND THE K VALUE IS %d\n",K);
             partInfo *newPart = malloc(sizeof(partInfo));
             newPart->nextPart = NULL;
             int size = 1;

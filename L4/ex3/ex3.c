@@ -195,6 +195,8 @@ void addPartitionAtLevel( unsigned int lvl, unsigned int offset )
     toAdd->offset = offset;
     toAdd->nextPart = NULL;
 
+    printf("I AM HERE! THE OFFSET IS %d\n", offset);
+
     if (levelHead == NULL) {
         levelHead = toAdd;
     }

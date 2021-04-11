@@ -325,6 +325,7 @@ void myfree(void* address, int size)
     int levelToSearch = log2Ceiling(size);
     int* addressPtr = (int*) address;
     int addressValue = * addressPtr;
+    printf("\nI AM HERE! THE ADDRVALUE IS %d\n", addressValue);
     addPartitionAtLevel(levelToSearch, addressValue);
     
 

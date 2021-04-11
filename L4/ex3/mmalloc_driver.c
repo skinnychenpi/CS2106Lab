@@ -140,7 +140,6 @@ int randomFree(allocateInfo allocated[], int size)
                 allocated[rNum].nInt);
         exit(1);
     }
-
     //Using our own free() implementation
     myfree( (void*) allocated[rNum].address,
             allocated[rNum].nInt*sizeof(int) );

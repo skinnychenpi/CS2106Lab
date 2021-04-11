@@ -204,13 +204,13 @@ void addPartitionAtLevel( unsigned int lvl, unsigned int offset )
         prevCursor = cursor;
         cursor = cursor->nextPart;
     }
+    // If the new one becomes the head.
     if (prevCursor == NULL) {
-        printf("I AM HERE!\n");
         levelHead = toAdd;
         toAdd->nextPart = cursor;
     } else {
         prevCursor->nextPart = toAdd;
-        toAdd->nextPart = prevCursor->nextPart;
+        toAdd->nextPart = cursor;
     }
     hmi.A[lvl] = levelHead;
 
@@ -323,11 +323,7 @@ void myfree(void* address, int size)
 {
     //TODO: Task 3. Implement the de allocation using buddy allocator
     int levelToSearch = log2Ceiling(size);
-    int* addressPtr = (int*) address;
-    int addressValue = * addressPtr;
     int offset = address - hmi.base;
-    printf("\nI AM HERE! THE OFFSETVALUE IS %d\n", offset);
-    printf("\nI AM HERE! THE SIZE IS %d\n", size);
     addPartitionAtLevel(levelToSearch, offset);
     
 

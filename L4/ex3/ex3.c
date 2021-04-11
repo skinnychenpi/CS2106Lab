@@ -326,10 +326,9 @@ void myfree(void* address, int size)
     int* addressPtr = (int*) address;
     int addressValue = * addressPtr;
     int offset = address - hmi.base;
-    printf("\nI AM HERE! THE ADDRVALUE IS %d\n", addressValue);
     printf("\nI AM HERE! THE OFFSETVALUE IS %d\n", offset);
     printf("\nI AM HERE! THE SIZE IS %d\n", size);
-    addPartitionAtLevel(levelToSearch, addressValue);
+    addPartitionAtLevel(levelToSearch, offset);
     
 
 }

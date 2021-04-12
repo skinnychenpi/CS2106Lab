@@ -334,6 +334,7 @@ void* mymalloc(int size)
     partInfo *levelSPart = removePartitionAtLevel(S);
 
     if (levelSPart != NULL) {
+        hmi.internalFragTotal += internalFrag;
         return (void*)hmi.base + levelSPart->offset;
     } else {
         int R = S;

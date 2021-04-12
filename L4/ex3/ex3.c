@@ -189,7 +189,7 @@ void printHeapStatistic()
     printf("Total Free Partitions: %d\n", totalFreePartition);
     printf("Total Free Size: %d bytes\n", totalFreeSize);
 
-    printf("Total Internal Fragmentation: %d bytes\n", 0);
+    printf("Total Internal Fragmentation: %d bytes\n", hmi.internalFragTotal);
 }
 
 void addPartitionAtLevel( unsigned int lvl, unsigned int offset )

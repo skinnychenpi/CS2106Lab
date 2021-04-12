@@ -187,6 +187,11 @@ void addPartitionAtLevel( unsigned int lvl, unsigned int offset )
  *      at higher level
  *********************************************************/
 {
+    // Find Buddy
+    int buddyOffset = buddyOf(offset + hmi.base, lvl) - hmi.base;
+    printf("The buddy OFFSET IS : %d \n",buddyOffset);
+    
+    // Insertion
     partInfo* levelHead = hmi.A[lvl];
     partInfo* cursor = levelHead;
     partInfo* prevCursor = NULL;
@@ -194,8 +199,6 @@ void addPartitionAtLevel( unsigned int lvl, unsigned int offset )
     partInfo* toAdd = malloc(sizeof(partInfo));
     toAdd->offset = offset;
     toAdd->nextPart = NULL;
-
-    printf("I AM HERE! THE OFFSET IS %d\n", offset);
 
     if (levelHead == NULL) {
         levelHead = toAdd;

@@ -188,7 +188,7 @@ void addPartitionAtLevel( unsigned int lvl, unsigned int offset )
  *********************************************************/
 {
     // Find Buddy
-    int buddyOffset = buddyOf(offset + hmi.base, lvl) - hmi.base;
+    int buddyOffset = buddyOf(offset + hmi.base, lvl);
     printf("The buddy OFFSET IS : %d \n",buddyOffset);
     
     // Insertion

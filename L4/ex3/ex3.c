@@ -330,6 +330,7 @@ void* mymalloc(int size)
     int levelSSize = 1;
     levelSSize <<= S;
     int internalFrag = levelSSize - size;
+    printf("IN MYMALLOC, THE INTERNAL FRAG IS: %d\n", internalFrag);
 
     partInfo *levelSPart = removePartitionAtLevel(S);
 

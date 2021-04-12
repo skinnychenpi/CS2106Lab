@@ -327,6 +327,10 @@ void* mymalloc(int size)
 {
     //TODO: Task 2. Implement the allocation using buddy allocator
     int S = log2Ceiling(size);
+    int levelSSize = 1;
+    levelSSize <<= S;
+    int internalFrag = levelSSize - size;
+
     partInfo *levelSPart = removePartitionAtLevel(S);
 
     if (levelSPart != NULL) {
@@ -353,6 +357,7 @@ void* mymalloc(int size)
             hmi.A[K] = newPart;
             K--;
         }
+        hmi.internalFragTotal += internalFrag;
         return (void*)hmi.base + levelRPart->offset;
     }
 
@@ -366,8 +371,14 @@ void myfree(void* address, int size)
 {
     //TODO: Task 3. Implement the de allocation using buddy allocator
     int levelToSearch = log2Ceiling(size);
+    
+    int levelSize = 1;
+    levelSize <<= levelToSearch;
+    int internalFrag = levelSize - size;
+    
     int offset = address - hmi.base;
     addPartitionAtLevel(levelToSearch, offset);
+    hmi.internalFragTotal -= internalFrag;
     
 
 }

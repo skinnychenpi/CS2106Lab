@@ -186,36 +186,65 @@ void addPartitionAtLevel( unsigned int lvl, unsigned int offset )
  *    If buddy is found, recursively (or repeatedly) perform merging and insert
  *      at higher level
  *********************************************************/
-{
+{   
+    if (lvl > hmi.maxIdx) return;
+
+    partInfo* levelHead = hmi.A[lvl];
     // Find Buddy
     int buddyOffset = buddyOf(offset, lvl);
-    printf("The buddy OFFSET IS : %d \n",buddyOffset);
+    // printf("The buddy OFFSET IS : %d \n",buddyOffset);
+    partInfo* findBuddyCursor = levelHead;
+    partInfo* findBuddyPrevCursor = NULL;
+    // Do linear search to find the buddy.
+    while (findBuddyCursor != NULL){
+        if (findBuddyCursor->offset == buddyOffset) {
+            break;
+        }
+        findBuddyPrevCursor = findBuddyCursor;
+        findBuddyCursor = findBuddyCursor->nextPart;
+    }
     
-    // Insertion
-    partInfo* levelHead = hmi.A[lvl];
-    partInfo* cursor = levelHead;
-    partInfo* prevCursor = NULL;
-
-    partInfo* toAdd = malloc(sizeof(partInfo));
-    toAdd->offset = offset;
-    toAdd->nextPart = NULL;
-
-    if (levelHead == NULL) {
-        levelHead = toAdd;
-    }
-    while (cursor != NULL && cursor->offset < offset) {
-        prevCursor = cursor;
-        cursor = cursor->nextPart;
-    }
-    // If the new one becomes the head.
-    if (prevCursor == NULL) {
-        levelHead = toAdd;
-        toAdd->nextPart = cursor;
+    // If we find a buddy:
+    if (findBuddyCursor != NULL) {
+        int nextLevelOffset = (buddyOffset < offset) ? buddyOffset : offset;
+        // remove the buddy
+        if (findBuddyPrevCursor == NULL) {
+            levelHead = findBuddyCursor->nextPart;
+            findBuddyCursor->nextPart = NULL;
+            hmi.A[lvl] = levelHead;
+        } else {
+            findBuddyPrevCursor->nextPart = findBuddyCursor->nextPart;
+            findBuddyCursor->nextPart = NULL;
+        }
+        addPartitionAtLevel(lvl + 1, nextLevelOffset);
     } else {
-        prevCursor->nextPart = toAdd;
-        toAdd->nextPart = cursor;
+        // Else just do insertion
+        partInfo* cursor = levelHead;
+        partInfo* prevCursor = NULL;
+
+        partInfo* toAdd = malloc(sizeof(partInfo));
+        toAdd->offset = offset;
+        toAdd->nextPart = NULL;
+
+        if (levelHead == NULL) {
+            levelHead = toAdd;
+        }
+        while (cursor != NULL && cursor->offset < offset) {
+            prevCursor = cursor;
+            cursor = cursor->nextPart;
+        }
+        // If the new one becomes the head.
+        if (prevCursor == NULL) {
+            levelHead = toAdd;
+            toAdd->nextPart = cursor;
+        } else {
+            prevCursor->nextPart = toAdd;
+            toAdd->nextPart = cursor;
+        }
+        hmi.A[lvl] = levelHead;
     }
-    hmi.A[lvl] = levelHead;
+
+    
 
 }
 

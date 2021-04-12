@@ -172,9 +172,22 @@ void printHeapStatistic()
    //Remember to preserve the message format!
 
     printf("Total Space: %d bytes\n", hmi.totalSize);
+
+    int totalFreePartition = 0;
+    int totalFreeSize = 0;
+    for (int lvl = 1; lvl <= hmi.maxIdx; lvl++) {
+        int levelSize = 1;
+        levelSize <<= lvl;
+        partInfo* levelCursor = hmi.A[lvl];
+        while (levelCursor != NULL) {
+            totalFreePartition++;
+            totalFreeSize += levelSize;
+            levelCursor = levelCursor->nextPart;
+        }
+    }
     
-    printf("Total Free Partitions: %d\n", 0);
-    printf("Total Free Size: %d bytes\n", 0);
+    printf("Total Free Partitions: %d\n", totalFreePartition);
+    printf("Total Free Size: %d bytes\n", totalFreeSize);
 
     printf("Total Internal Fragmentation: %d bytes\n", 0);
 }
@@ -243,8 +256,6 @@ void addPartitionAtLevel( unsigned int lvl, unsigned int offset )
         }
         hmi.A[lvl] = levelHead;
     }
-
-    
 
 }
 

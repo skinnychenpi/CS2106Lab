@@ -305,24 +305,58 @@ int setupHeap(int initialSize, int minPartSize, int maxPartSize)
     int maxIdx = log2Floor(maxPartSize);
     int minIdx = log2Floor(minPartSize);
     hmi.A = (partInfo**) malloc((maxIdx + 1) * sizeof(partInfo*));
-    hmi.maxIdx = maxIdx;
+    hmi.maxIdx = maxIdx; 
     hmi.minIdx = minIdx;
     for (int i = minIdx; i < maxIdx + 1; i++) {
         hmi.A[i] = NULL;
     }
 
     int currentAddress = 0;
-    for (int i = maxIdx; i >= 0; i--) {
+    // Deal with bit that is larger than maxIdx
+    int unlimitedMaxIdx = log2Floor(initialSize);
+    if (unlimitedMaxIdx > maxIdx) {
+        int numOfPartAtLevelMax = initialSize >> maxIdx;
+        int levelSize = maxPartSize;
+        partInfo* maxLevelHead = NULL;
+        partInfo* prevMaxLevelPart = NULL;
+        // Form the linked list at hmi.A[maxIdx]
+        while (numOfPartAtLevelMax > 0) {
+            // get new partInfo
+            partInfo* initialPart = malloc(sizeof(partInfo));
+            initialPart->offset = currentAddress;
+            initialPart->nextPart = NULL;
+            if (maxLevelHead == NULL) {
+                maxLevelHead = initialPart;
+            } else {
+                prevMaxLevelPart->nextPart = initialPart;
+            }
+            prevMaxLevelPart = initialPart;
+
+            currentAddress += levelSize;
+            numOfPartAtLevelMax--;
+        }
+        hmi.A[maxIdx] = maxLevelHead;
+    }
+
+    for (int i = maxIdx; i >= minIdx; i--) {
         int tmp = initialSize >> i;
         int bit = tmp & 1;
         if (bit == 1) {
             partInfo* initialPart = malloc(sizeof(partInfo));
             initialPart->offset = currentAddress;
             initialPart->nextPart = NULL;
-            hmi.A[i] = initialPart;
-            int levelSize = 1;
-            levelSize <<= i;
-            currentAddress += levelSize;
+            if (hmi.A[i] != NULL) {
+                partInfo* cursor = hmi.A[i];
+                while (cursor->nextPart != NULL) {
+                    cursor = cursor->nextPart;
+                }
+                cursor->nextPart = initialPart;
+            } else {
+                hmi.A[i] = initialPart;
+                int levelSize = 1;
+                levelSize <<= i;
+                currentAddress += levelSize;
+            }
         }
     }
 

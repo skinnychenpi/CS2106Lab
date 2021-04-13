@@ -200,21 +200,25 @@ void addPartitionAtLevel( unsigned int lvl, unsigned int offset )
  *      at higher level
  *********************************************************/
 {   
-    if (lvl > hmi.maxIdx) return;
-
     partInfo* levelHead = hmi.A[lvl];
-    // Find Buddy
-    int buddyOffset = buddyOf(offset, lvl);
-    // printf("The buddy OFFSET IS : %d \n",buddyOffset);
-    partInfo* findBuddyCursor = levelHead;
-    partInfo* findBuddyPrevCursor = NULL;
-    // Do linear search to find the buddy.
-    while (findBuddyCursor != NULL){
+    partInfo* findBuddyCursor;
+    partInfo* findBuddyPrevCursor;
+    int buddyOffset;
+    if (lvl < hmi.maxIdx) {
+        findBuddyCursor = levelHead;
+        findBuddyPrevCursor = NULL;
+        // Find Buddy
+        buddyOffset = buddyOf(offset, lvl);
+        // Do linear search to find the buddy.
+        while (findBuddyCursor != NULL) {
         if (findBuddyCursor->offset == buddyOffset) {
             break;
         }
         findBuddyPrevCursor = findBuddyCursor;
         findBuddyCursor = findBuddyCursor->nextPart;
+    }
+    } else {
+        findBuddyCursor = NULL;
     }
     
     // If we find a buddy:

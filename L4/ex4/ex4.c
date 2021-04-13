@@ -338,25 +338,25 @@ int setupHeap(int initialSize, int minPartSize, int maxPartSize)
         hmi.A[maxIdx] = maxLevelHead;
     }
 
-    for (int i = maxIdx; i >= minIdx; i--) {
+    for (int i = maxIdx - 1; i >= minIdx; i--) {
         int tmp = initialSize >> i;
         int bit = tmp & 1;
         if (bit == 1) {
             partInfo* initialPart = malloc(sizeof(partInfo));
             initialPart->offset = currentAddress;
             initialPart->nextPart = NULL;
-            if (hmi.A[i] != NULL) {
-                partInfo* cursor = hmi.A[i];
-                while (cursor->nextPart != NULL) {
-                    cursor = cursor->nextPart;
-                }
-                cursor->nextPart = initialPart;
-            } else {
-                hmi.A[i] = initialPart;
-                int levelSize = 1;
-                levelSize <<= i;
-                currentAddress += levelSize;
-            }
+            // if (hmi.A[i] != NULL) {
+            //     partInfo* cursor = hmi.A[i];
+            //     while (cursor->nextPart != NULL) {
+            //         cursor = cursor->nextPart;
+            //     }
+            //     cursor->nextPart = initialPart;
+            // } else {
+            hmi.A[i] = initialPart;
+            int levelSize = 1;
+            levelSize <<= i;
+            currentAddress += levelSize;
+            // }
         }
     }
 

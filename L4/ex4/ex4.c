@@ -295,9 +295,6 @@ int setupHeap(int initialSize, int minPartSize, int maxPartSize)
 	}
 
     hmi.base = base;
-
-	hmi.totalSize = initialSize;
-    hmi.internalFragTotal = 0;
 	
     //TODO: Task 1. Setup the rest of the bookkeeping info:
     //       hmi.A <= an array of partition linked list
@@ -310,6 +307,9 @@ int setupHeap(int initialSize, int minPartSize, int maxPartSize)
     for (int i = minIdx; i < maxIdx + 1; i++) {
         hmi.A[i] = NULL;
     }
+    hmi.internalFragTotal = initialSize & (minPartSize - 1);
+    hmi.totalSize = initialSize - hmi.internalFragTotal;
+    
 
     int currentAddress = 0;
     // Deal with bit that is larger than maxIdx
@@ -345,18 +345,10 @@ int setupHeap(int initialSize, int minPartSize, int maxPartSize)
             partInfo* initialPart = malloc(sizeof(partInfo));
             initialPart->offset = currentAddress;
             initialPart->nextPart = NULL;
-            // if (hmi.A[i] != NULL) {
-            //     partInfo* cursor = hmi.A[i];
-            //     while (cursor->nextPart != NULL) {
-            //         cursor = cursor->nextPart;
-            //     }
-            //     cursor->nextPart = initialPart;
-            // } else {
             hmi.A[i] = initialPart;
             int levelSize = 1;
             levelSize <<= i;
             currentAddress += levelSize;
-            // }
         }
     }
 

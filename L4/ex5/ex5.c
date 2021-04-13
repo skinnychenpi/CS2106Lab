@@ -1,8 +1,8 @@
 /*************************************
 * Lab 4 Exercise 5
-* Name:
-* Student Id: A????????
-* Lab Group: B??
+* Name: Chen Yuheng
+* Student Id: A0229929L
+* Lab Group: SOLO
 *************************************
 Note: Duplicate the above and fill in 
 for the 2nd member if  you are on a team
@@ -25,7 +25,7 @@ static sem_t mutex;
 static int concurrentMemOp = 0;
 
 int memOpIntegrity = 1;
-
+sem_t memoryMutex;
 
 partInfo* buildPartitionInfo(unsigned int offset, int size)
 /**********************************************************
@@ -131,6 +131,7 @@ int setupHeap(int initialSize)
 	
     //Setup Mutex for internal checking
     sem_init( &mutex, 0, 1 );
+    sem_init( &memoryMutex, 0, 1 );
 	return 1;
 }
 
@@ -195,7 +196,7 @@ void* mymalloc(int size)
  *    Return NULL otherwise 
  *********************************************************/
 {
-
+    sem_wait(&memoryMutex);
     //Checking for race condition
     //memOpStart();
 
@@ -223,6 +224,7 @@ void* mymalloc(int size)
     if (current == NULL){	//heap full
         //Check for race condition
         memOpEnd();
+        sem_post(&memoryMutex);
 	    return NULL;
 	}
 
@@ -236,7 +238,7 @@ void* mymalloc(int size)
 
     //Check for race condition
     memOpEnd();
-
+    sem_post(&memoryMutex);
 	return hmi.base + current->offset;
 }
 
@@ -246,6 +248,7 @@ void myfree(void* address)
  *    Attempt to free a previously allocated memory space
  *********************************************************/
 {
+    sem_wait(&memoryMutex);
 	partInfo *toBeFreed;
     int partID;
 
@@ -275,4 +278,5 @@ void myfree(void* address)
 
     //Check for race condition
     memOpEnd();
+    sem_post(&memoryMutex);
 }

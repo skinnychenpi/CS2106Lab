@@ -281,7 +281,7 @@ partInfo* removePartitionAtLevel(unsigned int lvl)
     }
 }
 
-int setupHeap(int initialSize)
+int setupHeap(int initialSize, int minPartSize, int maxPartSize)
 /**********************************************************
  * Setup a heap with "initialSize" bytes
  *********************************************************/
@@ -302,25 +302,27 @@ int setupHeap(int initialSize)
     //TODO: Task 1. Setup the rest of the bookkeeping info:
     //       hmi.A <= an array of partition linked list
     //       hmi.maxIdx <= the largest index for hmi.A[]
-    int numOfLevels = log2Floor(initialSize);
-    hmi.A = (partInfo**) malloc((numOfLevels + 1) * sizeof(partInfo*));
-    hmi.maxIdx = numOfLevels;
-    for (int i = 0; i < numOfLevels + 1; i++) {
+    int maxIdx = log2Floor(maxPartSize);
+    int minIdx = log2Floor(minPartSize);
+    hmi.A = (partInfo**) malloc((maxIdx + 1) * sizeof(partInfo*));
+    hmi.maxIdx = maxIdx;
+    hmi.minIdx = minIdx;
+    for (int i = minIdx; i < maxIdx + 1; i++) {
         hmi.A[i] = NULL;
     }
 
-    int base = 0;
-    for (int i = numOfLevels; i >= 0; i--) {
+    int currentAddress = 0;
+    for (int i = maxIdx; i >= 0; i--) {
         int tmp = initialSize >> i;
         int bit = tmp & 1;
         if (bit == 1) {
             partInfo* initialPart = malloc(sizeof(partInfo));
-            initialPart->offset = base;
+            initialPart->offset = currentAddress;
             initialPart->nextPart = NULL;
             hmi.A[i] = initialPart;
             int levelSize = 1;
             levelSize <<= i;
-            base += levelSize;
+            currentAddress += levelSize;
         }
     }
 

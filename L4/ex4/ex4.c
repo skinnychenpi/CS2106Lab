@@ -312,7 +312,7 @@ int setupHeap(int initialSize, int minPartSize, int maxPartSize)
     
 
     int currentAddress = 0;
-    // Deal with bit that is larger than maxIdx
+    // Deal with bit that is larger or equal to maxIdx
     int unlimitedMaxIdx = log2Floor(initialSize);
     if (unlimitedMaxIdx > maxIdx) {
         int numOfPartAtLevelMax = initialSize >> maxIdx;
@@ -337,7 +337,7 @@ int setupHeap(int initialSize, int minPartSize, int maxPartSize)
         }
         hmi.A[maxIdx] = maxLevelHead;
     }
-
+    // Deal with rest of the bits
     for (int i = maxIdx - 1; i >= minIdx; i--) {
         int tmp = initialSize >> i;
         int bit = tmp & 1;
@@ -366,10 +366,16 @@ void* mymalloc(int size)
 {
     //TODO: Task 2. Implement the allocation using buddy allocator
     int S = log2Ceiling(size);
+    if (S < hmi.minIdx) {
+        S = hmi.minIdx;
+    }
+    if (S > hmi.maxIdx) {
+        return NULL;
+    }
     int levelSSize = 1;
     levelSSize <<= S;
     int internalFrag = levelSSize - size;
-    printf("IN MYMALLOC, THE INTERNAL FRAG IS: %d\n", internalFrag);
+    // printf("IN MYMALLOC, THE INTERNAL FRAG IS: %d\n", internalFrag);
 
     partInfo *levelSPart = removePartitionAtLevel(S);
 

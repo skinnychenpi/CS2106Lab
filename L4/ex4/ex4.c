@@ -311,8 +311,8 @@ int setupHeap(int initialSize, int minPartSize, int maxPartSize)
     for (int i = minIdx; i < maxIdx + 1; i++) {
         hmi.A[i] = NULL;
     }
-    hmi.internalFragTotal = initialSize & (minPartSize - 1);
-    hmi.totalSize = initialSize - hmi.internalFragTotal;
+    hmi.internalFragTotal = 0;
+    hmi.totalSize = initialSize - (initialSize & (minPartSize - 1));
     
 
     int currentAddress = 0;

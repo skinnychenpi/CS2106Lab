@@ -316,7 +316,7 @@ int setupHeap(int initialSize, int minPartSize, int maxPartSize)
     int currentAddress = 0;
     // Deal with bit that is larger or equal to maxIdx
     int unlimitedMaxIdx = log2Floor(initialSize);
-    if (unlimitedMaxIdx > maxIdx) {
+    if (unlimitedMaxIdx >= maxIdx) {
         int numOfPartAtLevelMax = initialSize >> maxIdx;
         int levelSize = maxPartSize;
         partInfo* maxLevelHead = NULL;

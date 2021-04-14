@@ -167,8 +167,6 @@ void printHeapStatistic()
     printf("\nHeap Usage Statistics:\n");
     printf("======================\n");
 
-    printf("Total Space: %d bytes\n", hmi.totalSize);
-
    //Remember to preserve the message format!
 
     printf("Total Space: %d bytes\n", hmi.totalSize);

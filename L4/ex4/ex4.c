@@ -317,8 +317,7 @@ int setupHeap(int initialSize, int minPartSize, int maxPartSize)
     // Deal with bit that is larger or equal to maxIdx
     int unlimitedMaxIdx = log2Floor(initialSize);
     if (unlimitedMaxIdx > maxIdx) {
-        int numOfPartAtLevelMax = initialSize >> (maxIdx + 1);
-        numOfPartAtLevelMax <<= 1;
+        int numOfPartAtLevelMax = initialSize >> maxIdx;
         int levelSize = maxPartSize;
         partInfo* maxLevelHead = NULL;
         partInfo* prevMaxLevelPart = NULL;
@@ -341,7 +340,7 @@ int setupHeap(int initialSize, int minPartSize, int maxPartSize)
         hmi.A[maxIdx] = maxLevelHead;
     }
     // Deal with rest of the bits
-    for (int i = maxIdx; i >= minIdx; i--) {
+    for (int i = maxIdx - 1; i >= minIdx; i--) {
         int tmp = initialSize >> i;
         int bit = tmp & 1;
         if (bit == 1) {

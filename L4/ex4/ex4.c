@@ -171,8 +171,6 @@ void printHeapStatistic()
 
    //Remember to preserve the message format!
 
-    printf("Total Space: %d bytes\n", hmi.totalSize);
-
     int totalFreePartition = 0;
     int totalFreeSize = 0;
     for (int lvl = 1; lvl <= hmi.maxIdx; lvl++) {

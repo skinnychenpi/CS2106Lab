@@ -379,6 +379,4 @@ void myfree(void* address, int size)
     int offset = address - hmi.base;
     addPartitionAtLevel(levelToSearch, offset);
     hmi.internalFragTotal -= internalFrag;
-    
-
 }
